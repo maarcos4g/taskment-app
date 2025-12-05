@@ -1,35 +1,49 @@
 import { LucideIcon } from "lucide-react-native";
 import { FC } from "react";
-import { Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity, TouchableOpacityProps } from "react-native";
 
 interface ButtonProps extends TouchableOpacityProps {
   leftIcon?: LucideIcon
   rightIcon?: LucideIcon
   label: string
+  isLoading?: boolean
 }
 
 export const Button: FC<ButtonProps> = ({
   label,
   leftIcon: LeftIcon,
   rightIcon: RightIcon,
+  isLoading,
   ...props
 }) => {
   return (
     <TouchableOpacity
-    activeOpacity={0.7}
-      className="flex-row items-center justify-center bg-sky-400 py-3 rounded-2xl gap-2"
+      activeOpacity={0.7}
+      className="flex-row items-center justify-center bg-sky-400 py-3 rounded-2xl gap-2 disabled:bg-zinc-400"
+      disabled={isLoading}
       {...props}
     >
 
-      {LeftIcon && <LeftIcon className="text-white size-4" />}
+      {isLoading ? (
+        <ActivityIndicator
+          size="small"
+          className="text-white"
+        />
+      ) : (
 
-      <Text
-        className="font-bold text-base text-white"
-      >
-        {label}
-      </Text>
+        <>
+          {LeftIcon && <LeftIcon className="text-white size-4" />}
 
-      {RightIcon && <RightIcon className="text-white size-4" />}
-    </TouchableOpacity>
+          <Text
+            className="font-bold text-base text-white"
+          >
+            {label}
+          </Text>
+
+          {RightIcon && <RightIcon className="text-white size-4" />}
+        </>
+      )
+      }
+    </TouchableOpacity >
   )
 }

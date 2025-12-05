@@ -10,7 +10,8 @@ import { useSignInViewModule } from "./use-sign-in-view.module";
 
 export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
   control,
-  onSubmit
+  onSubmit,
+  isLoading
 }) => {
   return (
     <KeyboardContainer>
@@ -54,6 +55,7 @@ export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
           <Button
             label="Entrar"
             onPress={onSubmit}
+            isLoading={isLoading}
           />
 
           <View
