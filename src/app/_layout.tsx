@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Stack } from 'expo-router'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import ToastManager from 'toastify-react-native'
 
 export default function RootLayout() {
   const queryClient = new QueryClient()
@@ -14,6 +15,7 @@ export default function RootLayout() {
           <Stack.Screen name='(public)' />
           <Stack.Screen name='(private)' />
         </Stack>
+        <ToastManager useModal={false} />
       </QueryClientProvider>
     </GestureHandlerRootView>
   )
