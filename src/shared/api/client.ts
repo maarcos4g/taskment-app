@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Platform } from "react-native";
+import { useUserStore } from "../stores/user-store";
 
 function getBaseURL() {
   return Platform.select({
@@ -19,6 +20,18 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    if (error.response?.status === 401) {}
+    if (
+      error.response?.status === 401    
+    ) {
+      await handleUnauthorized()
+    }
   }
 )
+
+async function handleUnauthorized() {
+  const { logOut } = useUserStore()
+
+  delete apiClient.defaults.headers.common.Authorization
+
+  logOut()
+}
