@@ -20,7 +20,7 @@ export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
         className="items-center flex-1 relative"
       >
         <AuthHeader
-        title="Acesse sua conta"
+          title="Acesse sua conta"
         />
 
         <View
@@ -44,7 +44,7 @@ export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
 
             <TouchableOpacity
               className="mt-2 items-end"
-              onPress={() => { }}
+              onPress={() => router.push('/(public)/forgot-password')}
               activeOpacity={0.7}
             >
               <Text
@@ -74,13 +74,13 @@ export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
           </View>
 
           <View
-          className="flex-row items-center justify-center gap-1"
+            className="flex-row items-center justify-center gap-1"
           >
             <Text
-            className="font-semibold text-base text-black"
+              className="font-semibold text-base text-black"
             >
               Ainda não tem conta?
-              </Text>
+            </Text>
             <TouchableOpacity
               onPress={() => router.push('/(public)/register')}
               activeOpacity={0.7}
