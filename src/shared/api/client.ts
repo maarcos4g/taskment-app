@@ -1,5 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Platform } from "react-native";
 import { Toast } from "toastify-react-native";
 import { useUserStore } from "../stores/user-store";
@@ -15,20 +14,15 @@ export const baseURL = getBaseURL()
 
 export const apiClient = axios.create({
   baseURL,
+  timeout: 10000
 })
 
 apiClient.interceptors.request.use(
   async (config) => {
-    const userData = await AsyncStorage.getItem('taskment-auth')
+    const { token } = useUserStore.getState()
 
-    if (userData) {
-      const {
-        token
-      } = JSON.parse(userData)
-
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-      }
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
     }
 
     return config
@@ -40,30 +34,33 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    if (
-      error.response?.status === 401 &&
-      error.response?.data?.message === 'Invalid token'
-    ) {
+  async (error: AxiosError<{ message?: string }>) => {
+    if (error.response) {
+      const { status, data } = error.response
 
-      Toast.error('Sessão expirada, faça o login novamente.')
-      await handleUnauthorized()
-      return Promise.reject(
-        new Error('Sessão expirada, faça o login novamente.'),
-      )
+      if (status === 401) {
+        Toast.error('Sessão expirada, faça o login novamente.')
+        await handleUnauthorized()
+        return Promise.reject(
+          new Error('Sessão expirada, faça o login novamente.'),
+        )
+      }
+      if (status === 400) {
+        const errorMessage = data?.message || 'Falha na requisição'
+        Toast.error(errorMessage)
+        return Promise.reject(
+          new Error('Falha na requisição.')
+        )
+      }
+    } else {
+      Toast.error('Erro de conexão. Verifique sua internet.')
     }
-
-    if (error.response?.status === 400) {
-      Toast.error(error.response?.data?.message)
-      return Promise.reject(
-        new Error('Falha na requisição.')
-      )
-    }
+    return Promise.reject(error)
   }
 )
 
 async function handleUnauthorized() {
-  const { logOut } = useUserStore()
+  const { logOut } = useUserStore.getState()
 
   delete apiClient.defaults.headers.common.Authorization
 

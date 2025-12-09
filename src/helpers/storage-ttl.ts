@@ -1,12 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { StateStorage } from 'zustand/middleware'
 
-interface StorageItem {
-  value: string
-  expiry: number
-}
-
-export const createTTLStorage = (ttlInSeconds: number): StateStorage => {
+export const createTTLStorage = (): StateStorage => {
   return {
     getItem: async (key: string): Promise<string | null> => {
       const json = await AsyncStorage.getItem(key)
@@ -14,28 +9,22 @@ export const createTTLStorage = (ttlInSeconds: number): StateStorage => {
       if (!json) return null
 
       try {
-        const data: StorageItem = JSON.parse(json)
-        const now = Date.now()
+        const storageData = JSON.parse(json)
 
-        if (now > data.expiry) {
+        const expiresAt = storageData.state?.expiresAt
+
+        if (expiresAt && Date.now() > expiresAt) {
           await AsyncStorage.removeItem(key)
           return null
         }
-        return data.value
+        return json
       } catch (error) {
         return null
       }
     },
 
     setItem: async (key: string, value: string): Promise<void> => {
-      const now = Date.now()
-
-      const item: StorageItem = {
-        value: value,
-        expiry: now + (ttlInSeconds * 1000)
-      }
-
-      await AsyncStorage.setItem(key, JSON.stringify(item))
+      await AsyncStorage.setItem(key, value)
     },
 
     removeItem: async (key: string): Promise<void> => {
