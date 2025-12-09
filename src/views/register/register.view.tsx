@@ -4,12 +4,12 @@ import { Button } from "@/shared/components/button";
 import { IconButton } from "@/shared/components/icon-button";
 import { KeyboardContainer } from "@/shared/components/keyboard-container";
 import { router } from "expo-router";
-import { Instagram, LockKeyhole, MailCheck } from "lucide-react-native";
+import { Instagram, LockKeyhole, MailCheck, UserRoundCheck } from "lucide-react-native";
 import { FC } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
-import { useSignInViewModule } from "./use-sign-in-view.module";
+import { useRegisterViewModule } from "./use-register.module";
 
-export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
+export const RegisterView: FC<ReturnType<typeof useRegisterViewModule>> = ({
   control,
   onSubmit,
   isLoading
@@ -20,12 +20,19 @@ export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
         className="items-center flex-1 relative"
       >
         <AuthHeader
-        title="Acesse sua conta"
+        title="Crie sua conta"
         />
 
         <View
           className="w-full px-3 mt-6 gap-6"
         >
+          <AppInputController
+            leftIcon={UserRoundCheck}
+            label="Seu nome"
+            control={control}
+            name="name"
+          />
+
           <AppInputController
             leftIcon={MailCheck}
             label="Seu e-mail"
@@ -33,32 +40,18 @@ export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
             name="email"
           />
 
-          <View>
-            <AppInputController
-              leftIcon={LockKeyhole}
-              label="Sua senha"
-              control={control}
-              name="password"
-              secureTextEntry
-            />
-
-            <TouchableOpacity
-              className="mt-2 items-end"
-              onPress={() => { }}
-              activeOpacity={0.7}
-            >
-              <Text
-                className="text-sky-300 underline font-semibold text-sm"
-              >
-                Esqueci a senha
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <AppInputController
+            leftIcon={LockKeyhole}
+            label="Sua senha"
+            control={control}
+            name="password"
+            secureTextEntry
+          />
 
           <Button
-            label="Entrar"
+            label="Criar conta"
             onPress={onSubmit}
-            isLoading={isLoading}
+          isLoading={isLoading}
           />
 
           <View
@@ -74,21 +67,21 @@ export const SignInView: FC<ReturnType<typeof useSignInViewModule>> = ({
           </View>
 
           <View
-          className="flex-row items-center justify-center gap-1"
+            className="flex-row items-center justify-center gap-1"
           >
             <Text
-            className="font-semibold text-base text-black"
+              className="font-semibold text-base text-black"
             >
-              Ainda não tem conta?
-              </Text>
+              Já tem conta?
+            </Text>
             <TouchableOpacity
-              onPress={() => router.push('/(public)/register')}
+              onPress={() => router.push('/(public)/sign-in')}
               activeOpacity={0.7}
             >
               <Text
                 className="text-sky-300 font-semibold p-0"
               >
-                Crie aqui
+                Entrar
               </Text>
             </TouchableOpacity>
           </View>

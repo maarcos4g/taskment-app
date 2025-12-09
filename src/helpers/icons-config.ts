@@ -3,7 +3,8 @@ import {
   EyeOff,
   Instagram,
   LockKeyhole,
-  MailCheck
+  MailCheck,
+  UserRoundCheck
 } from "lucide-react-native";
 import { cssInterop } from "nativewind";
 
@@ -24,3 +25,4 @@ interopIcon(LockKeyhole);
 interopIcon(Eye);
 interopIcon(EyeOff);
 interopIcon(Instagram);
+interopIcon(UserRoundCheck);
