@@ -1,10 +1,35 @@
+import {
+  DMSans_400Regular,
+  DMSans_500Medium,
+  DMSans_600SemiBold,
+  DMSans_700Bold,
+  useFonts
+} from '@expo-google-fonts/dm-sans'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { Stack } from 'expo-router'
+import { SplashScreen, Stack } from 'expo-router'
+import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import ToastManager from 'toastify-react-native'
 
+SplashScreen.preventAutoHideAsync()
+
 export default function RootLayout() {
   const queryClient = new QueryClient()
+
+  const [fontsLoaded] = useFonts({
+    DMSans_400Regular,
+    DMSans_500Medium,
+    DMSans_600SemiBold,
+    DMSans_700Bold
+  })
+
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync()
+    }
+  }, [fontsLoaded])
+
+  if (!fontsLoaded) return null;
 
   return (
     <GestureHandlerRootView

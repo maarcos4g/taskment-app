@@ -24,7 +24,7 @@ export const AuthHeader: FC<AuthHeaderProps> = ({ title }) => {
       <View
         className="mt-[282px] pt-12 items-center gap-6"
       >
-        <Text className="font-bold text-2xl text-black">
+        <Text className="font-semibold text-2xl text-black">
           {title}
         </Text>
       </View>
